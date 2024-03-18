@@ -11,7 +11,7 @@ RUN sed -i s/archive/de.archive/ /etc/apt/sources.list \
 USER ubuntu
 WORKDIR /home/ubuntu
 
-RUN curl -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz | tar xz
+RUN curl -sS -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz | tar xz
 
 COPY start.sh start.sh
 
