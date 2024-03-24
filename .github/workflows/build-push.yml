@@ -36,7 +36,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: github-actions-runner
-          tags: podman
+          tags: latest
           containerfiles: |
             ./Dockerfile
 
