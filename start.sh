@@ -15,6 +15,7 @@ TOKEN=$(curl -sS -X POST -H "Authorization: token ${PAT}" -H "Accept: applicatio
 
 sudo -i -u ubuntu ./config.sh --unattended --url https://github.com/${REPOSITORY} --token ${TOKEN}
 
+# Remove the runner and unregister it from GitHub Actions.
 cleanup() {
     sudo -i -u ubuntu ./config.sh remove --token ${TOKEN}
 }
