@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Check if there is a new base image
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' && github.event_name != 'workflow_dispatch'
         id: check
         run: |
           set -Eeuxo pipefail
@@ -32,11 +32,21 @@ jobs:
 
       - name: Build image
         if: steps.check.outputs.out-of-date == 'true' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        id: build-image
+        id: build
         uses: redhat-actions/buildah-build@v2
         with:
           image: github-actions-runner
-          tags: latest
+          tags: podman
           containerfiles: |
             ./Dockerfile
 
+      - name: Push to ghcr.io
+        if: steps.check.outputs.out-of-date == 'true' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        id: push
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build.outputs.image }}
+          tags: ${{ steps.build.outputs.tags }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
