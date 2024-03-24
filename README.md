@@ -8,10 +8,14 @@ Please provide the repository, for which this runner is meant, as `REPOSITORY` e
 a suitable GitHub personal access token (PAT) in `GITHUB_PAT` or as a secret
 in file `/run/secrets/github_pat`.
 
+> [!WARNING]
+> Only use this runner for repositories you fully trust. This container is privileged and the user
+> inside the container has full root rights, this implies full root rights on the host!
+
 ## Docker run
 
 ```
-docker run -d -e REPOSITORY=marius/postfix-sendgrid -e GITHUB_PAT=MYPAT ghcr.io/marius/github-actions-runner
+docker run -d --privileged -e REPOSITORY=marius/postfix-sendgrid -e GITHUB_PAT=MYPAT ghcr.io/marius/github-actions-runner
 ```
 
 ## Docker compose example
