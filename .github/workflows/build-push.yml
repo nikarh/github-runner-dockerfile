@@ -1,0 +1,42 @@
+name: build-and-push
+
+on:
+  schedule:
+    - cron: '52 17 * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Check if there is a new base image
+        if: github.event_name != 'push'
+        id: check
+        run: |
+          set -Eeuxo pipefail
+          sudo apt install -y curl jq skopeo
+          PARENT=$(skopeo inspect docker://ubuntu:23.10 | jq .Layers)
+          OWN=$(skopeo inspect docker://ghcr.io/marius/github-actions-runner | jq .Layers)
+          OUTOFDATE=$(jq -cn "$OWN - ($OWN - $PARENT) | .==[]")
+          echo "out-of-date=$OUTOFDATE" >> $GITHUB_OUTPUT
+        
+      - name: Checkout repository
+        if: steps.check.outputs.out-of-date == 'true' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v4
+
+      - name: Build image
+        if: steps.check.outputs.out-of-date == 'true' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: github-actions-runner
+          tags: latest
+          containerfiles: |
+            ./Dockerfile
+
