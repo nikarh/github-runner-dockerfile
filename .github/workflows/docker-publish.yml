@@ -26,7 +26,7 @@ jobs:
           set -Eeuxo pipefail
           sudo apt install -y curl jq skopeo
           PARENT=$(skopeo inspect docker://ubuntu:23.10 | jq .Layers)
-          OWN=$(skopeo inspect docker://ghcr.io/marius/github-runner-dockerfile | jq .Layers)
+          OWN=$(skopeo inspect docker://ghcr.io/marius/github-actions-runner | jq .Layers)
           OUTOFDATE=$(jq -cn "$OWN - ($OWN - $PARENT) | .==[]")
           echo "out-of-date=$OUTOFDATE" >> $GITHUB_OUTPUT
         
@@ -52,4 +52,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/marius/github-runner-dockerfile:latest
+          tags: ghcr.io/marius/github-actions-runner:latest
