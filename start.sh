@@ -13,11 +13,10 @@ fi
 
 TOKEN=$(curl -sS -X POST -H "Authorization: token ${PAT}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${REPOSITORY}/actions/runners/registration-token | jq -r .token)
 
-sudo -i -u ubuntu ./config.sh --unattended --url https://github.com/${REPOSITORY} --token ${TOKEN}
+./config.sh --unattended --url https://github.com/${REPOSITORY} --token ${TOKEN}
 
-# Remove the runner and unregister it from GitHub Actions.
 cleanup() {
-    sudo -i -u ubuntu ./config.sh remove --token ${TOKEN}
+  ./config.sh remove --token ${TOKEN}
 }
 
 trap 'cleanup; exit 130' INT
@@ -26,10 +25,5 @@ trap 'cleanup; exit 132' KILL
 trap 'cleanup; exit 133' ERR
 trap 'cleanup; exit 143' TERM
 
-# We need to run the docker daemon as root and in the background to support docker based actions.
-dockerd &
-
-sudo -i -u ubuntu ./run.sh &
-
-# Wait for any background process to complete.
-wait -n
+./run.sh &
+wait
