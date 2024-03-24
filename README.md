@@ -27,6 +27,7 @@ services:
   github-actions-runner:
     container_name: github-actions-runner
     image: ghcr.io/marius/github-actions-runner
+    privileged: true
     environment:
       REPOSITORY: marius/postfix-sendgrid
     secrets:
