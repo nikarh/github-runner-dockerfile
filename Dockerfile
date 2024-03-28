@@ -4,8 +4,7 @@ ARG RUNNER_VERSION="2.314.1"
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt -qq update \
-    && apt install -y --no-install-recommends ca-certificates curl sudo libicu-dev jq buildah podman jq libarchive-tools gnupg skopeo \
-    && echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+    && apt install -y --no-install-recommends ca-certificates curl libicu-dev jq buildah podman jq libarchive-tools gnupg skopeo
 
 USER ubuntu
 WORKDIR /home/ubuntu
