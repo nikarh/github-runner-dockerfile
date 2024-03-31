@@ -13,7 +13,7 @@ fi
 
 TOKEN=$(curl -sS -X POST -H "Authorization: token ${PAT}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${REPOSITORY}/actions/runners/registration-token | jq -r .token)
 
-./config.sh --unattended --url https://github.com/${REPOSITORY} --token ${TOKEN}
+./config.sh --unattended --replace --url https://github.com/${REPOSITORY} --token ${TOKEN}
 
 cleanup() {
   ./config.sh remove --token ${TOKEN}
