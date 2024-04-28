@@ -1,4 +1,4 @@
-FROM ubuntu:24.10
+FROM ubuntu:23.10
 
 ARG RUNNER_VERSION="2.316.0"
 
