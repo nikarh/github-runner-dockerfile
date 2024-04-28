@@ -1,10 +1,10 @@
-FROM ubuntu:23.10
+FROM ubuntu:24.10
 
-ARG RUNNER_VERSION="2.315.0"
+ARG RUNNER_VERSION="2.316.0"
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt -qq update \
-    && apt install -y --no-install-recommends ca-certificates curl libicu-dev jq buildah podman jq libarchive-tools gnupg skopeo
+    && apt install -y --no-install-recommends ca-certificates curl libicu-dev jq buildah podman jq libarchive-tools gnupg skopeo git-crypt
 
 USER ubuntu
 WORKDIR /home/ubuntu
