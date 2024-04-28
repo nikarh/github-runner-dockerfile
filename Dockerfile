@@ -4,7 +4,7 @@ ARG RUNNER_VERSION="2.316.0"
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt -qq update \
-    && apt install -y --no-install-recommends ca-certificates curl libicu-dev jq buildah podman jq libarchive-tools gnupg skopeo git-crypt
+    && apt install -y --no-install-recommends ca-certificates curl libicu-dev jq buildah podman jq libarchive-tools gnupg skopeo git-crypt llvm clang
 
 USER ubuntu
 WORKDIR /home/ubuntu
