@@ -22,7 +22,7 @@ jobs:
           set -Eeuxo pipefail
           sudo apt install -y curl jq skopeo
           PARENT=$(skopeo inspect docker://ubuntu:23.10 | jq .Layers)
-          OWN=$(skopeo inspect docker://ghcr.io/marius/github-actions-runner | jq .Layers)
+          OWN=$(skopeo inspect docker://ghcr.io/nikarh/github-actions-runner | jq .Layers)
           OUTOFDATE=$(jq -cn "$OWN - ($OWN - $PARENT) | .==[]")
           echo "out-of-date=$OUTOFDATE" >> $GITHUB_OUTPUT
         
@@ -47,6 +47,6 @@ jobs:
         with:
           image: ${{ steps.build.outputs.image }}
           tags: ${{ steps.build.outputs.tags }}
-          registry: ghcr.io/marius
+          registry: ghcr.io/nikarh
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
